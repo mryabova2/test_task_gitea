@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "test_task_gitea"
+version = "0.1.0"
+description = ""
+authors = ["Maria Ryabova <mvryabova2@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pytest = ">=7.4.3,<7.5.0"
+selene = ">=2.0.0rc3post3,<2.1.0"
+selenium = "=4.16.0"
+allure-pytest = "^2.13.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
