@@ -1,6 +1,10 @@
 from time import sleep
+from selene import browser
 
 
-def test(wait_gitea_up, set_browser):
-    sleep(50)
+def test(confirm_gitea_settings):
+    browser.open("/")
+    # sleep(500)
     pass
+
+

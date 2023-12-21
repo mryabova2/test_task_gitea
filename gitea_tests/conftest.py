@@ -1,26 +1,36 @@
+import os
+from time import sleep
+
 import pytest
 import requests
-from requests.adapters import HTTPAdapter
-from selene import browser
-from selenium import webdriver
+from selene import browser, by
 from selenium.webdriver.chrome.options import Options
-from urllib3 import Retry
+from selene.support.shared.jquery_style import s, ss
+from requests.exceptions import ConnectionError
 
-pytest_plugins = ["docker_compose"]
+
+def is_responsive(url):
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            return True
+    except ConnectionError:
+        return False
 
 
-# @pytest.fixture
-# def wait_gitea_up(function_scoped_container_getter):
-#     request_session = requests.Session()
-#     retries = Retry(total=5,
-#                     backoff_factor=0.1,
-#                     status_forcelist=[500, 502, 503, 504])
-#     request_session.mount('http://', HTTPAdapter(max_retries=retries))
-#
-#     service = function_scoped_container_getter.get("gitea").network_info[0]
-#     api_url = "http://%s:%s/" % (service.hostname, service.host_port)
-#     assert request_session.get(api_url)
-#     return request_session, api_url
+# @pytest.fixture(scope="session")
+# def docker_compose_command():
+#     return "docker compose --force-recreate"
+
+@pytest.fixture(scope="session")
+def docker_setup():
+    return "up --build -d --force-recreate"
+
+
+@pytest.fixture(scope="session")
+def docker_compose_file(pytestconfig):
+    return os.path.join("C:\\Users\\m.ryabova\\PycharmProjects\\test_task_gitea", "docker-compose.yml")
+    # return os.path.join(str(pytestconfig.rootpath), "test_task_gitea\\", "docker-compose.yml")
 
 
 @pytest.fixture()
@@ -37,6 +47,21 @@ def set_browser():
     }
     options.capabilities.update(capabilities)
     browser.config.driver_options = options
-    browser.config.base_url = "https://demoqa.com/"
+    browser.config.base_url = "http://localhost:3000"
     browser.config.window_width = 1920
     browser.config.window_height = 1080
+
+
+@pytest.fixture(scope="session")
+def wait_gitea_running(docker_ip, docker_services):
+    url = "http://{}:{}".format(docker_ip, 3000)
+    docker_services.wait_until_responsive(
+        timeout=50.0, pause=0.1, check=lambda: is_responsive(url)
+    )
+
+
+@pytest.fixture()
+def confirm_gitea_settings(wait_gitea_running, set_browser):
+    browser.open("/")
+    # sleep(500)
+    browser.element(by.text("Установить Gitea")).click()
