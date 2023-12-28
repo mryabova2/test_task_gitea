@@ -5,7 +5,7 @@
 <p><img src="icons/check.png" height="10"/> Open bash <br>
 <img src="icons/check.png" height="10"/> <b>Run:</b> <i>git clone https://github.com/mryabova2/test_task_gitea.git</i><br>
 <img src="icons/check.png" height="10"/> <b>In downloaded project go to gitea_tests folder:</b>
-<i>cd /test_task_gitea/gitea_tests/</i><br>
+<i>cd test_task_gitea/gitea_tests/</i><br>
 <img src="icons/check.png" height="10"/> <b>Install requirements by:</b>
 <i>poetry install</i><br>
 <img src="icons/check.png" height="10"/> <b>Activate environment:</b>
