@@ -1,30 +1,47 @@
-from selene import browser, be, have, command
-from selene.support.shared.jquery_style import s, ss
+import requests
+from bs4 import BeautifulSoup
+from selene import browser, have
 from gitea_tests.test_data import *
 
 
+def test_check_html(wait_gitea_loading_with_add_settings):
+    right_menu.find_right()
+    left_menu.find_left()
+
+    assert html.get_title_text() == html.title_text
+    assert button_text(left_menu.find_left(), left_menu.explore_button_index) == left_menu.explore_button_text
+    assert button_text(left_menu.find_left(), left_menu.help_button_index) == left_menu.help_button_text
+    assert button_text(right_menu.find_right(), right_menu.register_button_index) == right_menu.register_button_text
+    assert button_text(right_menu.find_right(), right_menu.sign_in_button_index) == right_menu.sign_in_button_text
+
+
 def test_sign_up_new_user():
-    browser.open('/user/login')
-    ss(".navbar-right .item")[0].click()
-    s("#user_name").type(user_name)
-    s("#email").type(user_mail)
-    s("#password").type(user_password)
-    s("#retype").type(user_password)
-    s(".field .button").click()
-    assert s(".flash-success").should(be.visible)
-    assert s(".flash-success").should(have.text(success_message))
-    assert s(".truncated-item-name").should(have.text(user_name))
+    browser.open('/')
+    head_navigation.go_to_registration()
+    registration \
+        .type_user_name(user.name) \
+        .type_email(user.email) \
+        .type_password(user.password) \
+        .retype_password(user.password)
+
+    registration.click_reg_button()
+
+    assert registration.success_message.should(have.text(registration.success_message_text))
+    assert registration.user_registered.should(have.text(user.name))
 
 
-def test_create_repo():
-    browser.open('/repo/create')
-    s("#repo_name").should(be.visible).type(repo_name)
-    s('.field .button').click()
-    assert ss(".repo-title a")[0].should(have.text(user_name))
-    assert ss(".repo-title a")[1].should(have.text(repo_name))
-    s(f"[href='/{user_name}/{repo_name}/_new/main/']").click()
-    s('#file-name').type(file_name)
-    s('#edit_area').perform(command.js.set_value(file_text))
-    s('#commit-button').click()
-    assert s('.code-inner').should(have.text(file_text))
+def test_create_repo(get_signed_in):
+    repo_page \
+        .open_create_repo() \
+        .fill_repo_name(repo_name) \
+        .confirm_create_repo()
 
+    repo_page \
+        .create_new_file() \
+        .fill_file_name(file_name) \
+        .fill_file_body(file_text) \
+        .commit_changes()
+
+    assert repo_page.repo_title_user.should(have.text(user.name))
+    assert repo_page.repo_title_name.should(have.text(repo_name))
+    assert repo_page.file_body.should(have.text(file_text))
