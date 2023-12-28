@@ -1,3 +1,4 @@
+import allure
 import requests
 from bs4 import BeautifulSoup
 
@@ -13,6 +14,7 @@ def button_text(menu, button_index):
     return text
 
 
+
 class StartHtml:
     def __init__(self):
         self.url = 'http://localhost:3000'
@@ -23,10 +25,6 @@ class StartHtml:
         text = parse_page(self.url).title.string
         return text
 
-    # def get_menu(self, locator_menu):
-    #     menu = parse_page(self.url).find(self.head_menu_tag, locator_menu)
-    #     return menu
-
 
 class LeftMenu(StartHtml):
     def __init__(self):
@@ -34,9 +32,10 @@ class LeftMenu(StartHtml):
         self.left_locator = {'class': 'navbar-left'}
         self.explore_button_index = 5
         self.help_button_index = 7
-        self.explore_button_text = 'Explore'
-        self.help_button_text = 'Help'
+        self.explore_text = 'Explore'
+        self.help_text = 'Help'
 
+    @allure.step('Get left menu locators')
     def find_left(self):
         left_menu = parse_page(self.url).find(self.head_menu_tag, attrs=self.left_locator)
         return left_menu
@@ -48,9 +47,10 @@ class RightMenu(StartHtml):
         self.right_locator = {'class': 'navbar-right'}
         self.register_button_index = 1
         self.sign_in_button_index = 3
-        self.register_button_text = 'Register'
-        self.sign_in_button_text = 'Sign In'
+        self.register_text = 'Register'
+        self.sign_in_text = 'Sign In'
 
+    @allure.step('Get right menu locators')
     def find_right(self):
         right_menu = parse_page(self.url).find(self.head_menu_tag, attrs=self.right_locator)
         return right_menu

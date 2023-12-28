@@ -1,3 +1,4 @@
+import allure
 from selene import browser
 from selene.support.shared.jquery_style import s
 
@@ -10,6 +11,7 @@ class SignInPage:
         self.password = s('#password')
         self.confirm = s('.field .button')
 
+    @allure.step('Sign in')
     def sign_in(self, name, password):
         browser.open(self.url)
         self.name.type(name)

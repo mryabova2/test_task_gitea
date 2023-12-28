@@ -1,18 +1,16 @@
-import requests
-from bs4 import BeautifulSoup
 from selene import browser, have
 from gitea_tests.test_data import *
 
 
 def test_check_html(wait_gitea_loading_with_add_settings):
-    right_menu.find_right()
-    left_menu.find_left()
+    right_menu = right_menu_html.find_right()
+    left_menu = left_menu_html.find_left()
 
     assert html.get_title_text() == html.title_text
-    assert button_text(left_menu.find_left(), left_menu.explore_button_index) == left_menu.explore_button_text
-    assert button_text(left_menu.find_left(), left_menu.help_button_index) == left_menu.help_button_text
-    assert button_text(right_menu.find_right(), right_menu.register_button_index) == right_menu.register_button_text
-    assert button_text(right_menu.find_right(), right_menu.sign_in_button_index) == right_menu.sign_in_button_text
+    assert button_text(left_menu, left_menu_html.explore_button_index) == left_menu_html.explore_text
+    assert button_text(left_menu, left_menu_html.help_button_index) == left_menu_html.help_text
+    assert button_text(right_menu, right_menu_html.register_button_index) == right_menu_html.register_text
+    assert button_text(right_menu, right_menu_html.sign_in_button_index) == right_menu_html.sign_in_text
 
 
 def test_sign_up_new_user():
