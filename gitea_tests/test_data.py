@@ -17,7 +17,6 @@ right_menu_html = RightMenu()
 left_menu_html = LeftMenu()
 
 user = test_user
-# base_url = 'http://localhost:3000'
 success_message = "Учётная запись успешно создана. Добро пожаловать!"
 repo_name = "first_repo"
 file_name = "first_file"

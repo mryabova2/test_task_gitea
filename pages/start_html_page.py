@@ -14,7 +14,6 @@ def button_text(menu, button_index):
     return text
 
 
-
 class StartHtml:
     def __init__(self):
         self.url = 'http://localhost:3000'
